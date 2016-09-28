@@ -32,6 +32,9 @@ class NbPdfConverter:
     def convert_code_cell(self, cell):
         fmt = pygments2xpre(cell.source)
         self.pieces.append(XPreformatted(fmt, style=self.stylesheet['Code']))
+
+        if cell.outputs:
+            self.pieces.append(Spacer(1, 6))
         
         for output in cell.outputs:
             self.convert_output(output)
