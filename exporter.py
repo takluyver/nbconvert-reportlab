@@ -29,7 +29,16 @@ class NbPdfConverter:
         fmt = pygments2xpre(cell.source)
         self.pieces.append(XPreformatted(fmt, style=self.stylesheet['Code']))
         
-        # TODO: outputs!
+        for output in cell.outputs:
+            self.convert_output(output)
+
+    def convert_output(self, output):
+        if output.output_type == 'stream':
+            self.add_plain_text(''.join(output.text))
+        # TODO: other output types
+
+    def add_plain_text(self, text):
+        self.pieces.append(XPreformatted(text, style=self.stylesheet['Code']))
 
     def go(self):
         for cell in self.nb.cells:
