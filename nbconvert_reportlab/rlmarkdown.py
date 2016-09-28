@@ -1,7 +1,7 @@
 """Markdown to reportlab conversion.
 """
 from io import BytesIO
-from reportlab.platypus import Paragraph, XPreformatted, Image
+from reportlab.platypus import Paragraph, XPreformatted, Spacer
 from reportlab.platypus.flowables import HRFlowable
 from reportlab.lib.pygments2xpre import pygments2xpre
 from html import escape
@@ -10,6 +10,8 @@ import mistune
 from nbconvert.filters.markdown_mistune import MarkdownWithMath
 from IPython.lib.latextools import latex_to_png
 from matplotlib import mathtext
+
+from .pdfimage import PdfImage
 
 class InlineRenderer(mistune.Renderer):
     # autolink: rely on default implementation
@@ -107,12 +109,12 @@ class BlockRenderer(mistune.Renderer):
         return []  # TODO
     
     def block_math(name, text):
-        # print(repr(text))
         text = '$%s$' % text.strip()
-        mt = mathtext.MathTextParser('bitmap')
         f = BytesIO()
-        mt.to_png(f, text, fontsize=16, dpi=120)
-        return [Image(f, width=50, height=50, kind='%')]
+        mathtext.math_to_image(text, f, dpi=120, format='pdf')
+        img = PdfImage(f)
+        img.hAlign = 'CENTER'
+        return [Spacer(1, 4), img, Spacer(1, 4)]
 
 def md_to_flowables(src, stylesheet):
     inliner_lexer = mistune.InlineLexer(InlineRenderer())
