@@ -91,7 +91,7 @@ class BlockRenderer(mistune.Renderer):
     def block_quote(self, content):
         return []  # TODO
 
-    def list(self, content, ordered):
+    def list(self, content, ordered=True):
         return []  # TODO
         
     def list_item(self, body):
