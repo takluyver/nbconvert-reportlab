@@ -19,19 +19,33 @@ from reportlab.lib.pygments2xpre import pygments2xpre
 
 from .rlmarkdown import md_to_flowables
 
+def add_in_prompt(text, prompt_no):
+    """Add the In [1]: prompts to a block of code."""
+    if prompt_no is None:
+        prompt = 'In [ ]: '
+    else:
+        prompt = 'In [%d]: ' % prompt_no
+
+    margin = ' ' * len(prompt)
+    colour_prompt = '<span color="#000080">%s</span>' % prompt
+    lines = text.splitlines(keepends=True)
+    return colour_prompt + margin.join(lines)
+
 class NbPdfConverter:
     def __init__(self, nb, resources):
         self.nb = nb
         self.resources = resources
         self.stylesheet = getSampleStyleSheet()
+        self.stylesheet["Code"].leftIndent = 12
         self.pieces = []
 
     def convert_markdown_cell(self, cell):
         self.pieces.extend(md_to_flowables(cell.source, self.stylesheet))
 
     def convert_code_cell(self, cell):
-        fmt = pygments2xpre(cell.source)
-        self.pieces.append(XPreformatted(fmt, style=self.stylesheet['Code']))
+        code = pygments2xpre(cell.source).rstrip()
+        code = add_in_prompt(code, cell.execution_count)
+        self.pieces.append(XPreformatted(code, style=self.stylesheet['Code']))
 
         if cell.outputs:
             self.pieces.append(Spacer(1, 6))
