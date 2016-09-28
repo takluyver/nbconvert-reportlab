@@ -8,6 +8,7 @@ an XPreformatted object.  If it's not installed, you won't get colours.
 """
 import io
 
+from traitlets import default
 from nbconvert.exporters import Exporter
 from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, XPreformatted
 from reportlab.lib.styles import getSampleStyleSheet
@@ -54,6 +55,12 @@ class NbPdfConverter:
         return buffer.getvalue()
 
 class ReportlabExporter(Exporter):
+    output_mimetype = 'application/pdf'
+
+    @default('file_extension')
+    def _file_extension_default(self):
+        return '.pdf'
+
     def from_notebook_node(self, nb, resources=None, **kw):
         nb_copy, resources = super().from_notebook_node(nb, resources)
 
