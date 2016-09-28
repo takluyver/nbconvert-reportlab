@@ -6,11 +6,14 @@ calling 'pygments2xpre' will return content suitable for display in
 an XPreformatted object.  If it's not installed, you won't get colours.
 
 """
+from binascii import a2b_base64
 import io
 
 from traitlets import default
 from nbconvert.exporters import Exporter
-from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, XPreformatted
+from reportlab.platypus import (
+    Paragraph, SimpleDocTemplate, Spacer, XPreformatted, Image
+)
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.pygments2xpre import pygments2xpre
 
@@ -36,10 +39,19 @@ class NbPdfConverter:
     def convert_output(self, output):
         if output.output_type == 'stream':
             self.add_plain_text(''.join(output.text))
-        # TODO: other output types
+        elif output.output_type in {'display_data', 'execute_result'}:
+            self.add_mimebundle(output.data, output.metadata)
 
     def add_plain_text(self, text):
         self.pieces.append(XPreformatted(text, style=self.stylesheet['Code']))
+
+    def add_mimebundle(self, data, metadata=None):
+        if 'image/png' in data:
+            img_data = a2b_base64(data['image/png'])
+            self.pieces.append(Image(io.BytesIO(img_data),
+                                     height=25, width=25, kind='%'))
+        elif 'text/plain' in data:
+            self.add_plain_text(data['text/plain'])
 
     def go(self):
         for cell in self.nb.cells:
