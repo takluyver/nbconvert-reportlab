@@ -13,7 +13,7 @@ from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, XPreformatt
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.pygments2xpre import pygments2xpre
 
-from rlmarkdown import md_to_flowables
+from .rlmarkdown import md_to_flowables
 
 class NbPdfConverter:
     def __init__(self, nb, resources):
