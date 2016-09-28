@@ -23,7 +23,7 @@ class InlineRenderer(mistune.Renderer):
         return ''  # TODO
     
     def image(self, link, title, text):
-        src = mistune.escape_link(src, quote=True)
+        src = mistune.escape_link(link, quote=True)
         return '<img src="%s" />' % src
 
     def link(self, link, title, text):
