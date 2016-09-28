@@ -84,6 +84,10 @@ class NbPdfConverter:
         return buffer.getvalue()
 
 class ReportlabExporter(Exporter):
+    """Convert a notebook to PDF using Reportlab
+
+    This is the API which nbconvert calls.
+    """
     output_mimetype = 'application/pdf'
 
     @default('file_extension')
@@ -96,26 +100,3 @@ class ReportlabExporter(Exporter):
         output = NbPdfConverter(nb_copy,  resources).go()
         return output, resources
 
-
-def convertSourceFiles(filenames):
-    "Helper function - makes minimal PDF document"
-    styT=getSampleStyleSheet()["Title"]
-    styC=getSampleStyleSheet()["Code"]
-    doc = SimpleDocTemplate("pygments2xpre.pdf")
-    S = [].append
-    for filename in filenames:
-        S(Paragraph(filename,style=styT))
-        src = open(filename, 'r').read()
-        fmt = pygments2xpre(src)
-        S(XPreformatted(fmt, style=styC))
-    doc.build(S.__self__)
-    print('saved pygments2xpre.pdf')
-
-if __name__=='__main__':
-    import sys
-    filename = sys.argv[1]
-    ex = ReportlabExporter()
-    output, resources = ex.from_filename(filename)
-    with open('testnb.pdf', 'wb') as f:
-        f.write(output)
-    print('Written testnb.pdf')
