@@ -1,11 +1,11 @@
 An experimental tool to convert Jupyter notebooks to PDFs using
 `Reportlab <https://pypi.python.org/pypi/reportlab/>`__.
 
-Install:
+Install::
 
     pip install nbconvert_reportlab
 
-Use:
+Use::
 
     jupyter nbconvert --to pdf-rl MyNotebook.ipynb
 
