@@ -17,3 +17,6 @@ automatic generation, and that can lead to a variety of problems.
 This package uses the open source Reportlab Toolkit to convert notebooks
 directly to PDFs. This avoids a lot of complexity, but at least for now there
 are many things that it cannot handle and will simply skip over.
+
+See an `example output PDF
+<https://github.com/takluyver/nbconvert-reportlab/blob/master/Trapezoid%20Rule.pdf>`__.
