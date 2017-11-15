@@ -1,0 +1,16 @@
+[build-system]
+requires = ["flit"]
+build-backend = "flit.buildapi"
+
+[tool.flit.metadata]
+module = "nbconvert_reportlab"
+author = "Thomas Kluyver"
+author-email = "thomas@kluyver.me.uk"
+description-file = "README.rst"
+home-page = "https://github.com/takluyver/nbconvert-reportlab"
+classifiers = ["License :: OSI Approved :: MIT License", "Topic :: Documentation"]
+requires = ["nbconvert", "reportlab", "pdfrw (>=0.3)", "matplotlib", "mistune (>=0.8.1)"]
+
+
+[tool.flit.entrypoints."nbconvert.exporters"]
+pdf-rl = "nbconvert_reportlab:ReportlabExporter"
