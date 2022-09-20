@@ -13,7 +13,7 @@ from matplotlib import mathtext
 
 from .pdfimage import PdfImage
 
-class InlineRenderer(mistune.Renderer):
+class InlineRenderer(mistune.HTMLRenderer):
     # autolink: rely on default implementation
         
     def inline_html(self, html):
@@ -57,7 +57,7 @@ class InlineRenderer(mistune.Renderer):
         return ''  # TODO
 
 
-class BlockRenderer(mistune.Renderer):
+class BlockRenderer(mistune.HTMLRenderer):
     def get_style(self, name):
         return self.options['stylesheet'][name]
 
